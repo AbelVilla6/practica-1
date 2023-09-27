@@ -1,4 +1,5 @@
 import Products, { Product } from '@/models/Product';
+import Orders, { Order } from '@/models/Order';
 import connect from '@/lib/mongoose';
 import Users, { User } from '@/models/User';
 import { Types } from 'mongoose';
@@ -20,6 +21,26 @@ export async function getProducts(): Promise<ProductsResponse> {
   
   return {
     products: products,
+  };
+}
+export interface OrdersResponse {
+  orders : Order[];
+}
+
+export async function getOrders(): Promise<OrdersResponse> {
+  await connect();
+
+  const orderProjection = {
+    date: true,
+    address: true,
+    cardHolder: true,
+    orderItems: true, 
+    user: true,
+  };
+  const orders = await Orders.find({}, orderProjection);
+  
+  return {
+    orders: orders,
   };
 }
 
@@ -81,4 +102,28 @@ export interface CreateUserResponse {
     }
   
     return user;
+  }
+
+  export interface ProductResponse {
+    name: string;
+    price: number;
+    img: string;
+    description: string;
+  }
+  export async function getProduct(productId: string): Promise<ProductResponse | null> {
+    await connect();
+  
+    const productProjection = {
+      name: true,
+      price: true,
+      img: true,
+      description: true,
+    };
+    const product = await Products.findById(productId, productProjection);
+  
+    if (product === null) {
+      return null;
+    }
+  
+    return product;
   }
