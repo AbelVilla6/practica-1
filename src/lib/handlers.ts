@@ -127,3 +127,42 @@ export interface CreateUserResponse {
   
     return product;
   }
+
+  export interface CartResponse {
+    cartItems: [];
+  }
+  interface CartItem {
+    product:string,
+    qty:number,
+  }
+  export async function getCartByUserId(userId: string): Promise<CartResponse | null> {
+    await connect();
+  
+    const cartProjection = {
+      _id: false,
+      cartItems: true,      
+    };
+    const productProjection = {
+      _id: true,
+      name: true,
+      price: true,      
+    };
+    const cartItemsId = await Users.findById(userId, cartProjection);
+    if (!cartItemsId || !cartItemsId.cartItems) {
+      return null;
+    }
+  
+    const cartItemsPromises = cartItemsId.cartItems.map(async (cartItem: CartItem) => {
+      const product = await Products.findById(cartItem.product, productProjection)
+      return {
+        product,
+        qty: cartItem.qty
+      };
+    });
+  
+    // Wait for all promises to resolve
+    const cartItems = await Promise.all(cartItemsPromises);
+  
+    return { cartItems };
+  }
+  
