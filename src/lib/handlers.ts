@@ -129,7 +129,7 @@ export interface CreateUserResponse {
   }
 
   export interface CartResponse {
-    cartItems: [];
+    cartItems: [] | null;
   }
   interface CartItem {
     product:string,
@@ -164,5 +164,37 @@ export interface CreateUserResponse {
     const cartItems = await Promise.all(cartItemsPromises);
   
     return { cartItems };
+  }
+
+  export interface ModifyCartResponse{
+    status: number,
+    cartItems: CartResponse | null,
+  }
+
+  export async function modifyCart(userId: string, productId: string, qty: number): Promise<ModifyCartResponse> {
+    await connect();
+
+    const user = await Users.findById(userId);
+    if (!user) return {status:404, cartItems: null};
+    const product = await Products.findById(productId)
+    if (!product) return {status:404, cartItems: null};
+  
+    const productIndex = user.cartItems.findIndex((cartItem: CartItem) => cartItem.product.toString() === productId);
+    let status = -1
+    if (productIndex !== -1) {
+      status = 200
+      user.cartItems[productIndex].qty = qty;  // update existing product qty
+    } else {
+      status = 201
+      user.cartItems.push({ product: productId, qty });  // add new product to cart
+    }
+  
+    try {
+      await user.save();  
+      return {status, cartItems: user.cartItems};
+    } catch (err) {
+      console.error(err);
+      return {status:500, cartItems: null};
+    }
   }
   

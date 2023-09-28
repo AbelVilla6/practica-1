@@ -24,6 +24,15 @@ const products: Product[] = [
     color: 'Blue',
     description: 'Apple iPhone 15 (128 GB) - Azul',
     operative_system: 'IOS 16',
+    technology: '5G',
+  },
+  {
+    name: 'Apple iPhone 12',
+    price: 669,
+    img: 'https://m.media-amazon.com/images/I/71vKy5OHuPL._AC_SL1500_.jpg',
+    color: 'Red',
+    description: 'Apple iPhone 12 (64 GB) - Red',
+    operative_system: 'IOS 16',
     technology: '4G',
   },
 ];
