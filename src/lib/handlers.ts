@@ -201,18 +201,18 @@ export interface CreateUserResponse {
 
   //DELETE /api/users/{userId}/cart/{productId}
   export interface DeleteCartResponse{
-    cartItems: CartResponse | null,
+    cartItems: CartResponse,
   }
 
   export async function deleteCartItem(
     userId: string, 
-    productId: string): Promise<DeleteCartResponse> {
+    productId: string): Promise<DeleteCartResponse | null> {
     await connect();
 
     const user = await Users.findById(userId)
-    if (!user) return {cartItems: null};
+    if (!user) return null;
     const product = await Products.findById(productId)
-    if (!product) return {cartItems: null};
+    if (product === null) return null;
   
     const productIndex = user.cartItems.findIndex((cartItems: CartItem) => cartItems.product.toString() === productId);
     
@@ -285,7 +285,6 @@ export async function createOrder(
   user.cartItems = []
   user.orders.push(orderId);
 
-  //await Users.findByIdAndUpdate(userId, {cartItems: user.cartItems, order: user.orders});
   await user.save();  
 
   return {

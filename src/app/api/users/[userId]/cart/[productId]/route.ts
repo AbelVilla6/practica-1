@@ -51,7 +51,7 @@ export async function DELETE(
   }
   const cartItems = await deleteCartItem(params.userId, params.productId);
 
-  if (!cartItems) {
+  if (cartItems === null ){
     return NextResponse.json({ error: "User or Product not found" }, { status: 404 });
   }
 

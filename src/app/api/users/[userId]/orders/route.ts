@@ -12,7 +12,7 @@ export async function GET(
   }
 ): Promise<NextResponse<OrdersResponse> | {}> {
   if (!Types.ObjectId.isValid(params.userId)) {
-    return NextResponse.json({}, { status: 400 });
+    return NextResponse.json({error: "Invalid userId"}, { status: 400 });
   }
 
   const orders = await getOrdersByUserId(params.userId);
@@ -39,7 +39,7 @@ export async function POST(
     const body = await request.json();
   
     if (!Types.ObjectId.isValid(params.userId) || !body.address || !body.cardHolder || !body.cardNumber ) {
-      return NextResponse.json({}, { status: 400 });
+      return NextResponse.json({error: "Invalid userId, or any attribute error"}, { status: 400 });
     }
       
     const orders = await createOrder(params.userId, body);
