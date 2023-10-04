@@ -52,6 +52,49 @@ async function seed() {
   await conn.connection.db.dropDatabase();
 
   const insertedProducts = await Products.insertMany(products);
+  
+  const orders: Order[] = [
+    {
+    date: new Date('1970-01-01T00:00:00.000Z'),
+    address: 'Unnamed Street 123, 12345 London,UK',
+    cardHolder: 'Foo Bar',
+    cardNumber: '0000111122223333',
+    orderItems: [
+      {
+        product: insertedProducts[0]._id,
+        qty: 2,
+        price: insertedProducts[0].price,
+      },
+      {
+        product: insertedProducts[1]._id,
+        qty: 5,
+        price: insertedProducts[1].price,
+      },
+    ],
+  },
+  {
+    date: new Date('1970-01-01T00:00:00.000Z'),
+    address: 'Another address 456, 45678 London,UK',
+    cardHolder: 'Foo Bar',
+    cardNumber: '4455667788990011',
+    orderItems: [
+      {
+        product: insertedProducts[0]._id,
+        qty: 2,
+        price: insertedProducts[0].price,
+      },
+      {
+        product: insertedProducts[1]._id,
+        qty: 5,
+        price: insertedProducts[1].price,
+      },
+    ],
+  }
+]
+
+  const insertedOrder = await Orders.create(orders);
+  console.log(JSON.stringify(insertedOrder, null, 2));
+
   const user: User = {
     email: 'johndoe@example.com',
     password: '1234',
@@ -69,35 +112,14 @@ async function seed() {
         qty: 5,
       },
     ],
-    orders: [],
+    orders: [    
+        insertedOrder[0]._id,
+        insertedOrder[1]._id,
+    ],
   };
 
   const insertedUser = await Users.create(user);
   console.log(JSON.stringify(insertedUser, null, 2));
-  const order: Order = {
-    date: new Date(),
-    address: '123 Main St, 12345 New York, United States',
-    cardHolder: 'John Doe',
-    cardNumber: '1234567812345678',
-    orderItems: [
-      {
-        product: insertedProducts[0]._id,
-        qty: 2,
-        price: insertedProducts[0].price,
-      },
-      {
-        product: insertedProducts[1]._id,
-        qty: 5,
-        price: insertedProducts[1].price,
-      },
-    ],
-    user: insertedUser._id
-
-  };
-
-  const insertedOrder = await Orders.create(order);
-  console.log(JSON.stringify(insertedOrder, null, 2));
-
 
   const retrievedUser = await Users
   .findOne({ email: 'johndoe@example.com' })

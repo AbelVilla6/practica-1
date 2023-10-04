@@ -4,6 +4,7 @@ import connect from '@/lib/mongoose';
 import Users, { User } from '@/models/User';
 import { Types } from 'mongoose';
 
+//GET /api/products
 export interface ProductsResponse {
   products: Product[];
 }
@@ -23,6 +24,8 @@ export async function getProducts(): Promise<ProductsResponse> {
     products: products,
   };
 }
+
+//GET /api/products/{productId}
 export interface OrdersResponse {
   orders : Order[];
 }
@@ -44,6 +47,7 @@ export async function getOrders(): Promise<OrdersResponse> {
   };
 }
 
+//POST /api/users
 export interface CreateUserResponse {
     _id: Types.ObjectId | string;
   }
@@ -77,6 +81,8 @@ export interface CreateUserResponse {
       _id: newUser._id,
     };
   }
+
+//GET /api/users/{userId}
   export interface UserResponse {
     email: string;
     name: string;
@@ -104,6 +110,7 @@ export interface CreateUserResponse {
     return user;
   }
 
+//GET /api/products/{productId}
   export interface ProductResponse {
     name: string;
     price: number;
@@ -127,7 +134,7 @@ export interface CreateUserResponse {
   
     return product;
   }
-
+//GET /api/users/{userId}/cart
   export interface CartResponse {
     cartItems: [] | null;
   }
@@ -147,34 +154,27 @@ export interface CreateUserResponse {
       name: true,
       price: true,      
     };
-    const cartItemsId = await Users.findById(userId, cartProjection);
-    if (!cartItemsId || !cartItemsId.cartItems) {
+    
+    const cartItems = await Users.findById(userId, cartProjection).populate("cartItems.product", productProjection );
+    if (!cartItems || !cartItems.cartItems) {
       return null;
     }
-  
-    const cartItemsPromises = cartItemsId.cartItems.map(async (cartItem: CartItem) => {
-      const product = await Products.findById(cartItem.product, productProjection)
-      return {
-        product,
-        qty: cartItem.qty
-      };
-    });
-  
-    // Wait for all promises to resolve
-    const cartItems = await Promise.all(cartItemsPromises);
-  
-    return { cartItems };
+    return  cartItems;
   }
 
+  //PUT /api/users/{userId}/cart/{productId}
   export interface ModifyCartResponse{
     status: number,
     cartItems: CartResponse | null,
   }
 
-  export async function modifyCart(userId: string, productId: string, qty: number): Promise<ModifyCartResponse> {
+  export async function modifyCart(
+    userId: string, 
+    productId: string, 
+    qty: number): Promise<ModifyCartResponse> {
     await connect();
 
-    const user = await Users.findById(userId);
+    const user = await Users.findById(userId)
     if (!user) return {status:404, cartItems: null};
     const product = await Products.findById(productId)
     if (!product) return {status:404, cartItems: null};
@@ -188,6 +188,7 @@ export interface CreateUserResponse {
       status = 201
       user.cartItems.push({ product: productId, qty });  // add new product to cart
     }
+    await user.populate("cartItems.product", {name:true, price:true});
   
     try {
       await user.save();  
@@ -197,4 +198,125 @@ export interface CreateUserResponse {
       return {status:500, cartItems: null};
     }
   }
+
+  //DELETE /api/users/{userId}/cart/{productId}
+  export interface DeleteCartResponse{
+    cartItems: CartResponse | null,
+  }
+
+  export async function deleteCartItem(
+    userId: string, 
+    productId: string): Promise<DeleteCartResponse> {
+    await connect();
+
+    const user = await Users.findById(userId)
+    if (!user) return {cartItems: null};
+    const product = await Products.findById(productId)
+    if (!product) return {cartItems: null};
   
+    const productIndex = user.cartItems.findIndex((cartItems: CartItem) => cartItems.product.toString() === productId);
+    
+    if (productIndex !== -1) {
+      user.cartItems.splice(productIndex,1);
+    
+    await user.save();      
+    }
+    await user.populate("cartItems.product", {name:true, price:true});
+    return user.cartItems;
+}
+
+//GET /api/users/{userId}/orders
+
+export async function getOrdersByUserId(userId: string): Promise<OrdersResponse | null> {
+  await connect();
+  const ordersProjection = {
+    _id: false,
+    orders: true, 
+  };
+  const orderProjection = {
+    _id: true,
+    address: true,
+    date: true,    
+    cardHolder: true,
+    cardNumber: true, 
+  };
+  
+  const user = await Users.findById(userId, ordersProjection);
+  if (!user || !user.orders || user.orders.length === 0) {
+    return null;
+  }
+  
+  return user.populate('orders', orderProjection);
+}
+
+//POST /api/users/{userId}/orders
+export interface CreateOrderResponse {
+  _id: Types.ObjectId | string;
+}
+
+export async function createOrder(
+  userId: string,
+  order: {  
+  address: string;
+  cardHolder: string;
+  cardNumber: string;
+}): Promise<CreateOrderResponse | {} | null > {
+  await connect();
+
+  const user = await Users.findById(userId).populate('cartItems.product');
+  if (!user){
+    return null
+  }
+  if (user.cartItems.length === 0) {
+    return {};
+  }
+
+  const orderDoc: Order = {
+    orderItems : user.cartItems,
+    date: new Date(),
+    address: order.address,
+    cardHolder: order.cardHolder,
+    cardNumber: order.cardNumber,
+  };
+
+  const newOrder = await Orders.create(orderDoc);
+  const orderId = newOrder._id;
+
+  user.cartItems = []
+  user.orders.push(orderId);
+
+  //await Users.findByIdAndUpdate(userId, {cartItems: user.cartItems, order: user.orders});
+  await user.save();  
+
+  return {
+    _id: newOrder._id,
+  };
+}
+
+//GET /api/users/{userId}/orders/{orderId}
+export interface UserOrderResponse {
+  cartItems: [] | null;
+}
+export async function getUserOrderById(userId: string, orderId: string): Promise<OrdersResponse | null> {
+  await connect();
+
+  const ordersProjection = {
+    _id: false,
+    orders: true,
+  };
+  
+  const productProjection = {
+    name: true
+  }  
+  const user = await Users.findById(userId, ordersProjection);
+  if (!user || !user.orders || user.orders.length === 0) {
+    return null;
+  }
+  
+  const existingOrder = user.orders.findIndex((item:any) => item.toString() === orderId);
+  if ( existingOrder === -1){
+    return null
+  }
+  const order = await Orders.findById(orderId, {__v:false});
+  return order.populate('orderItems.product', productProjection)
+}

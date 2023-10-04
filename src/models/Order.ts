@@ -2,8 +2,8 @@ import mongoose, { Schema, Types } from 'mongoose';
 
 export interface Order {
   _id?: Types.ObjectId;
-  date: Date;
   address: string;
+  date: Date;  
   cardHolder: string;
   cardNumber: string;
   orderItems: {
@@ -11,16 +11,15 @@ export interface Order {
     qty: number;
     price: number;
   }[];
-  user: Types.ObjectId;
 }
 
 const OrderSchema = new Schema({
-  date: {
-    type: Date,
-    required: true,
-  },
   address: {
     type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
     required: true,
   },
   cardHolder: {
@@ -30,9 +29,8 @@ const OrderSchema = new Schema({
   cardNumber: {
     type: String,
     required: true,
-    unique: true,
   },
-  OrderItems: [
+  orderItems: [
     {
       _id: false,
       product: {
@@ -48,15 +46,11 @@ const OrderSchema = new Schema({
       price: {
         type: Number,
         required: true,
+        min: 0,
       },
     },
   ],
-  user: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-  ],
+  
 });
 
 export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
