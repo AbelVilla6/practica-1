@@ -257,33 +257,33 @@ export interface CreateOrderResponse {
 export async function createOrder(
   userId: string,
   order: {  
-  address: string;
-  cardHolder: string;
-  cardNumber: string;
-}): Promise<CreateOrderResponse | {} | null > {
+    address: string;
+    cardHolder: string;
+    cardNumber: string;
+}): Promise<CreateOrderResponse | {} | null | 0> {
   await connect();
 
-  const user = await Users.findById(userId).populate('cartItems.product');
-  if (!user){
+  const user = await Users.findById(userId);//.populate('cartItems.product');
+  if (user === null ){
     return null
   }
-  if (user.cartItems.length === 0) {
-    return {};
+  if (user.cartItems.length === 0){
+    return 0
+  }
+  const prevOrder = await Orders.find({cardNumer: order.cardNumber});
+  
+  if (prevOrder.length !== 0) {
+    return null;
   }
 
-  const orderDoc: Order = {
-    orderItems : user.cartItems,
+  const doc: Order = {
+    ...order,
     date: new Date(),
-    address: order.address,
-    cardHolder: order.cardHolder,
-    cardNumber: order.cardNumber,
+    orderItems : [],
   };
 
-  const newOrder = await Orders.create(orderDoc);
-  const orderId = newOrder._id;
-
-  user.cartItems = []
-  user.orders.push(orderId);
+  const newOrder = await Orders.create(doc);
+  user.orders.push(newOrder._id);  
 
   await user.save();  
 

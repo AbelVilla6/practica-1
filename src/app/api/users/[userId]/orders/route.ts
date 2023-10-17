@@ -43,12 +43,13 @@ export async function POST(
     }
       
     const orders = await createOrder(params.userId, body);
+    if (orders === 0){
+      return NextResponse.json({error: "The cart is empty"}, { status: 400 });
+    }
     if (!orders) {
         return NextResponse.json({error: "User not found"}, { status: 404 });
     }
-    if (Object.keys(orders).length === 0){
-        return NextResponse.json({}, { status: 400 });
-    }
+
     if ('_id' in orders && orders._id) {
         return NextResponse.json(orders, { 
             status: 201, 
