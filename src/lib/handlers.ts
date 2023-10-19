@@ -260,26 +260,31 @@ export async function createOrder(
     address: string;
     cardHolder: string;
     cardNumber: string;
-}): Promise<CreateOrderResponse | {} | null | 0> {
+}): Promise<CreateOrderResponse | null | 0> {
   await connect();
 
-  const user = await Users.findById(userId);//.populate('cartItems.product');
+  const user = await Users.findById(userId);
   if (user === null ){
     return null
   }
   if (user.cartItems.length === 0){
     return 0
   }
-  const prevOrder = await Orders.find({cardNumer: order.cardNumber});
-  
-  if (prevOrder.length !== 0) {
-    return null;
-  }
+  await user.populate("cartItems.product", {_id: true, name: true, price: true});
+  await user.save();
 
+  const cartItems = user.cartItems.map((item:any) => {
+    const orderItems = {
+      product: item.product,
+      qty: item.qty,
+      price: item.product.price,
+      };
+    return orderItems;
+  });
   const doc: Order = {
     ...order,
     date: new Date(),
-    orderItems : [],
+    orderItems : cartItems,
   };
 
   const newOrder = await Orders.create(doc);
