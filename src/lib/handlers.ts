@@ -26,7 +26,7 @@ export async function getProducts(): Promise<ProductsResponse> {
   };
 }
 
-//GET /api/products/{productId}
+//GET /api/orders
 export interface OrdersResponse {
   orders : Order[];
 }

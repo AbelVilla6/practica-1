@@ -58,7 +58,7 @@ async function seed() {
     {
     date: new Date('1970-01-01T00:00:00.000Z'),
     address: 'Unnamed Street 123, 12345 London,UK',
-    cardHolder: 'Foo Bar',
+    cardHolder: 'John Doe',
     cardNumber: '0000111122223333',
     orderItems: [
       {
@@ -76,7 +76,7 @@ async function seed() {
   {
     date: new Date('1970-01-01T00:00:00.000Z'),
     address: 'Another address 456, 45678 London,UK',
-    cardHolder: 'Foo Bar',
+    cardHolder: 'John Doe',
     cardNumber: '4455667788990011',
     orderItems: [
       {
@@ -96,7 +96,7 @@ async function seed() {
   const insertedOrder = await Orders.create(orders);
   console.log(JSON.stringify(insertedOrder, null, 2));
 
-  const user: User = {
+  const user: User[] = [{
     email: 'johndoe@example.com',
     password: await bcrypt.hash("1234", 10),
     name: 'John',
@@ -117,7 +117,24 @@ async function seed() {
         insertedOrder[0]._id,
         insertedOrder[1]._id,
     ],
-  };
+  },
+  {
+    email: 'foobar@example.com',
+    password: await bcrypt.hash("12345", 10),
+    name: 'Foo',
+    surname: 'Bar',
+    address: 'Unnamed Street 123, 12345 London,UK',
+    birthdate: new Date('1970-01-01'),
+    cartItems: [
+      {
+        product: insertedProducts[0]._id,
+        qty: 2,
+      },
+    ],
+    orders: [    
+        
+    ],
+  }];
 
   const insertedUser = await Users.create(user);
   console.log(JSON.stringify(insertedUser, null, 2));

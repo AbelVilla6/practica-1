@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { modifyCart, ModifyCartResponse } from '@/lib/handlers';
 import { deleteCartItem, DeleteCartResponse } from '@/lib/handlers';
 import { Types } from 'mongoose';
+import { Session } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/authOptions';
 
 export async function PUT(
   request: NextRequest, 
@@ -12,6 +15,15 @@ export async function PUT(
   }
 ): Promise<NextResponse<ModifyCartResponse> | {}> {
   const body = await request.json();
+  const session: Session | null = await getServerSession(authOptions);
+  
+  if (!session?.user) {
+    return NextResponse.json({}, { status: 401 });
+  }
+
+  if (session.user._id !== params.userId) {
+    return NextResponse.json({}, { status: 403 });
+  }
 
   if (!Types.ObjectId.isValid(params.userId)) {
     return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
@@ -41,6 +53,15 @@ export async function DELETE(
     params: {userId: string, productId: string}
   }
 ): Promise<NextResponse<DeleteCartResponse> | {}> {
+  const session: Session | null = await getServerSession(authOptions);
+  
+  if (!session?.user) {
+    return NextResponse.json({}, { status: 401 });
+  }
+
+  if (session.user._id !== params.userId) {
+    return NextResponse.json({}, { status: 403 });
+  }
   
   if (!Types.ObjectId.isValid(params.userId)) {
     return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
