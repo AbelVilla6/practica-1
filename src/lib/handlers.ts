@@ -3,6 +3,7 @@ import Orders, { Order } from '@/models/Order';
 import connect from '@/lib/mongoose';
 import Users, { User } from '@/models/User';
 import { Types } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 //GET /api/products
 export interface ProductsResponse {
@@ -67,9 +68,10 @@ export interface CreateUserResponse {
     if (prevUser.length !== 0) {
       return null;
     }
-  
+    const hash = await bcrypt.hash(user.password, 10);
     const doc: User = {
       ...user,
+      password: hash,
       birthdate: new Date(user.birthdate),
       cartItems: [],
       orders: [],
