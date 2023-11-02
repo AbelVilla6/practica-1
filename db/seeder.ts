@@ -10,11 +10,11 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const products: Product[] = [
   {
-    name: 'Smartphone Xiaomi Redmi Note 12',
+    name: 'Xiaomi Redmi Note 12',
     price: 221,
     img: '/img/xiaomi-note12.png',
     color: 'Black',
-    description: 'Smartphone Xiaomi Redmi Note 12 Pro 8GB/ 256GB/ 6.67"/ Negro Medianoche',
+    description: 'Xiaomi Redmi Note 12 Pro 8GB/ 256GB/ 6.67"/ Negro Medianoche',
     operative_system: 'Android 5.0',
     technology: '4G',
   },
