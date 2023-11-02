@@ -12,7 +12,7 @@ const products: Product[] = [
   {
     name: 'Smartphone Xiaomi Redmi Note 12',
     price: 221,
-    img: 'https://m.media-amazon.com/images/I/51O609vwqsL._AC_SX679_.jpg',
+    img: '/img/xiaomi-note12.png',
     color: 'Black',
     description: 'Smartphone Xiaomi Redmi Note 12 Pro 8GB/ 256GB/ 6.67"/ Negro Medianoche',
     operative_system: 'Android 5.0',
@@ -21,9 +21,9 @@ const products: Product[] = [
   {
     name: 'Apple iPhone 15',
     price: 959,
-    img: 'https://m.media-amazon.com/images/I/71vKy5OHuPL._AC_SL1500_.jpg',
-    color: 'Blue',
-    description: 'Apple iPhone 15 (128 GB) - Azul',
+    img: 'https://m.media-amazon.com/images/I/81NDDPNpt4L._AC_UF894,1000_QL80_.jpg',
+    color: 'Black',
+    description: 'Apple iPhone 15 (128 GB) - Negro',
     operative_system: 'IOS 16',
     technology: '5G',
   },

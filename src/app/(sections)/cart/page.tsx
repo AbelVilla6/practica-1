@@ -39,7 +39,7 @@ export default async function Cart() {
                 {cartItem.product.name}
               </Link>
               <br />
-              {cartItem.qty}0
+              {cartItem.qty}
               <br />
               {cartItem.product.price.toFixed(2) + ' €'}
             </div>

@@ -8,7 +8,7 @@ interface ProductTileProps {
 export default function ProductTile({ product }: ProductTileProps) {
   return (
     <Link href={`/products/${product!._id}`} className='group'>
-      <div className='aspect-h-7 aspect-w-5 w-full overflow-hidden rounded-lg bg-gray-200'>
+      <div className='aspect-h-6 aspect-w-4.5 w-full overflow-hidden rounded-lg bg-gray-200'>
         <img
           src={product.img}
           alt={product.name}

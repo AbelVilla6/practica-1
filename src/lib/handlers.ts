@@ -138,12 +138,21 @@ export interface CreateUserResponse {
   }
 //GET /api/users/{userId}/cart
   export interface CartResponse {
-    cartItems: [] | null;
+    cartItems: {
+      product: {
+        _id:number,
+        name:string,
+        description: string,
+        price: number,
+      }
+      qty : number,
+    }[] | null, 
+    
   }
-  interface CartItem {
+  /*interface CartItem {
     product:string,
     qty:number,
-  }
+  }*/
   export async function getCartByUserId(userId: string): Promise<CartResponse | null> {
     await connect();
   
@@ -181,7 +190,7 @@ export interface CreateUserResponse {
     const product = await Products.findById(productId)
     if (!product) return {status:404, cartItems: null};
   
-    const productIndex = user.cartItems.findIndex((cartItem: CartItem) => cartItem.product.toString() === productId);
+    const productIndex = user.cartItems.findIndex((item: any) => item.product.toString() === productId);
     let status = -1
     if (productIndex !== -1) {
       status = 200
@@ -216,7 +225,7 @@ export interface CreateUserResponse {
     const product = await Products.findById(productId)
     if (product === null) return null;
   
-    const productIndex = user.cartItems.findIndex((cartItems: CartItem) => cartItems.product.toString() === productId);
+    const productIndex = user.cartItems.findIndex((item: any) => item.product.toString() === productId);
     
     if (productIndex !== -1) {
       user.cartItems.splice(productIndex,1);
