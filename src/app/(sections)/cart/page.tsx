@@ -1,8 +1,8 @@
-/*import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
-import { CartItemsResponse, getCartItems } from '@/lib/handlers';
+import { CartResponse, getCartByUserId } from '@/lib/handlers';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -14,11 +14,11 @@ export default async function Cart() {
     redirect('/api/auth/signin');
   }
 
-  const cartItemsData: CartItemsResponse | null = await getCartItems(
+  const cartItemsData: CartResponse | null = await getCartByUserId(
     session.user._id
   );
 
-  if (!cartItemsData) {
+  if (!cartItemsData || cartItemsData.cartItems === null) {
     notFound();
   }
 
@@ -39,7 +39,7 @@ export default async function Cart() {
                 {cartItem.product.name}
               </Link>
               <br />
-              {cartItem.qty}
+              {cartItem.qty}0
               <br />
               {cartItem.product.price.toFixed(2) + ' €'}
             </div>
@@ -48,4 +48,4 @@ export default async function Cart() {
       )}
     </div>
   );
-}*/
+}
