@@ -31,6 +31,25 @@ export interface OrdersResponse {
   orders : Order[];
 }
 
+/*
+export interface OrdersResponse {
+  orders: {
+    _id: number,
+    date: number,
+    address: string,
+    cardHolder: string,
+    orderItems: {
+      product: {
+        _id:number,
+        name:string,
+        description: string,
+        price: number,
+        }
+        qty : number,
+        price : number,
+      }
+  }[] | null,} */
+
 export async function getOrders(): Promise<OrdersResponse> {
   await connect();
 
