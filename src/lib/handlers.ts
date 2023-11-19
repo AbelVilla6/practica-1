@@ -140,7 +140,7 @@ export interface CreateUserResponse {
   export interface CartResponse {
     cartItems: {
       product: {
-        _id:number,
+        _id:Types.ObjectId,
         name:string,
         description: string,
         price: number,
