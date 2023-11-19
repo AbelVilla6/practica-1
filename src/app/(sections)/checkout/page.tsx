@@ -3,12 +3,13 @@ import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
 import { CartResponse, getCartByUserId } from '@/lib/handlers';
+import { OrdersResponse, getOrdersByUserId } from '@/lib/handlers';
 import Link from 'next/link';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Cart() {
+export default async function Checkout() {
   const session: Session | null = await getServerSession(authOptions);
 
   if (!session) {
@@ -19,18 +20,22 @@ export default async function Cart() {
     session.user._id
   );
 
+  const orderData = await getOrdersByUserId(
+    session.user._id
+  );
+
   if (!cartItemsData || cartItemsData.cartItems === null) {
-    return (
-      <div className="text-center mt-8">
-        <p className="text-gray-900 dark:text-gray-300">The cart is empty.</p>
-      </div>
-    );
+    notFound();
+  }
+
+  if (!orderData || orderData.orders === null) {
+    notFound();
   }
 
   return (
     <div className='flex flex-col'>
       <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
-        My Shopping Cart
+        Checkout
       </h3>
       {cartItemsData.cartItems.length === 0 ? (
         <div className='text-center'>
@@ -68,14 +73,7 @@ export default async function Cart() {
                   </td>
                   <td className="px-4 py-3">
                     <div className='flex items-center'>
-                      <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md mr-1">-</button>
-                      <span className="bg-gray-200 px-2 py-1 rounded-md">
-                        {cartItem.qty}
-                      </span>
-                      <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md ml-1">+</button>
-                      <button className="text-gray-500 bg-red-200 px-2 py-1 rounded-md ml-1">
-                        <TrashIcon className='h-5 w-5' aria-hidden='true' />
-                      </button>
+                        <div className="ml-5">{cartItem.qty}</div>
                     </div>
                   </td>
                   <td className="px-4 py-3">{cartItem.product.price}</td>
@@ -95,11 +93,34 @@ export default async function Cart() {
             </tbody>
           </table>
 
-          <div className="flex justify-center mt-6">
-              <button className="bg-black text-white px-4 py-2 rounded-md">
-                <Link href="/checkout">
-                  Checkout
-                </Link>
+          <div className="mt-6">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Shipping Address</h2>
+            <div className="border rounded p-2 mt-2 bg-white">
+                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].address}</p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row">
+            {/* Primer par */}
+            <div className="w-full sm:w-1/2 mr-4">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Holder</h2>
+                <div className="border rounded p-2 mt-2 bg-white">
+                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].cardHolder}</p>
+                </div>
+            </div>
+
+            {/* Segundo par */}
+            <div className="w-full sm:w-1/2">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Number</h2>
+                <div className="border rounded p-2 mt-2 bg-white">
+                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].cardNumber}</p>
+                </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-8">
+              <button className="bg-gray-300 text-white px-5 py-3 rounded-md">
+                  Purchase
               </button>
           </div>
         </> 
