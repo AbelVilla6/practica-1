@@ -6,7 +6,7 @@ export default function Header() {
           e-Phone
         </h1>
         <p className='mt-2 text-xs leading-5 text-gray-400 sm:mt-2 sm:text-sm lg:text-base'>
-          The e-phone created by technologists for citizens
+          The e-commerce created by experts for citizens
         </p>
       </div>
     </header>

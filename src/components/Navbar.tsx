@@ -22,13 +22,13 @@ export default async function Navbar() {
               href='/'
             >
               <img
-                className='block h-8 w-auto'
-                src='/img/logo.svg'
+                className='block h-12 w-auto'
+                src='/img/logo.png'
                 alt='e-Phone logo'
               />
-              <div className='inline-block w-auto text-xl font-semibold'>
+              {/* <div className='inline-block w-auto text-xl font-semibold'>
                 e-Phone
-              </div>
+              </div> */}
             </Link>
           </div>
           <div className='absolute inset-y-0 right-0 flex items-center space-x-4'>

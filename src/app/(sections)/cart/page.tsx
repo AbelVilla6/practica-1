@@ -50,7 +50,7 @@ export default async function Cart() {
                 <th scope="col" className="px-4 py-3">
                   Price
                 </th>
-                <th scope="col" className="px-4 py-3">
+                <th scope="col" className="px-4 py-3 hidden sm:table-cell">
                   Total
                 </th>
               </tr>
@@ -63,7 +63,7 @@ export default async function Cart() {
                     className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
                     <Link href={`/products/${cartItem.product._id}`}>
-                      {cartItem.product.name}&#34;
+                      {cartItem.product.name}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
@@ -78,8 +78,8 @@ export default async function Cart() {
                       </button>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{cartItem.product.price}</td>
-                  <td className="px-4 py-3">{(cartItem.qty * cartItem.product.price).toFixed(2)}</td>
+                  <td className="px-4 py-3">{cartItem.product.price} €</td>
+                  <td className="px-4 py-3 hidden sm:table-cell">{(cartItem.qty * cartItem.product.price).toFixed(2)} €</td>
                 </tr>
               ))}
               <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
@@ -88,8 +88,8 @@ export default async function Cart() {
                 </td>
                 <td className="px-4 py-3"></td>
                 <td className="px-4 py-3"></td>
-                <td className="px-4 py-3">
-                  {cartItemsData.cartItems.reduce((total, cartItem) => total + cartItem.qty * cartItem.product.price, 0).toFixed(2)}
+                <td className="px-4 py-3 hidden sm:table-cell">
+                  {cartItemsData.cartItems.reduce((total, cartItem) => total + cartItem.qty * cartItem.product.price, 0).toFixed(2)} €
                 </td>
               </tr>
             </tbody>
@@ -98,7 +98,7 @@ export default async function Cart() {
           <div className="flex justify-center mt-6">
               <button className="bg-black text-white px-4 py-2 rounded-md">
                 <Link href="/checkout">
-                  Checkout
+                  Check Out
                 </Link>
               </button>
           </div>

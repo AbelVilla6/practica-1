@@ -76,8 +76,8 @@ export default async function Checkout() {
                         <div className="ml-5">{cartItem.qty}</div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{cartItem.product.price}</td>
-                  <td className="px-4 py-3">{(cartItem.qty * cartItem.product.price).toFixed(2)}</td>
+                  <td className="px-4 py-3">{cartItem.product.price} €</td>
+                  <td className="px-4 py-3">{(cartItem.qty * cartItem.product.price).toFixed(2)} €</td>
                 </tr>
               ))}
               <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
@@ -87,7 +87,7 @@ export default async function Checkout() {
                 <td className="px-4 py-3"></td>
                 <td className="px-4 py-3"></td>
                 <td className="px-4 py-3">
-                  {cartItemsData.cartItems.reduce((total, cartItem) => total + cartItem.qty * cartItem.product.price, 0).toFixed(2)}
+                  {cartItemsData.cartItems.reduce((total, cartItem) => total + cartItem.qty * cartItem.product.price, 0).toFixed(2)} €
                 </td>
               </tr>
             </tbody>
