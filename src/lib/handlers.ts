@@ -26,7 +26,7 @@ export async function getProducts(): Promise<ProductsResponse> {
   };
 }
 
-//GET /api/orders
+// GET /api/orders
 // export interface OrdersResponse {
 //   orders : Order[];
 // }
@@ -38,6 +38,7 @@ export interface OrdersResponse {
     date: number,
     address: string,
     cardHolder: string,
+    cardNumber: string,
     orderItems: {
       product: {
         _id:number,
@@ -47,7 +48,7 @@ export interface OrdersResponse {
         }
         qty : number,
         price : number,
-      }
+      },
   }[] | null,} 
 
 export async function getOrders(): Promise<OrdersResponse> {
@@ -331,7 +332,39 @@ export async function createOrder(
 export interface UserOrderResponse {
   cartItems: [] | null;
 }
-export async function getUserOrderById(userId: string, orderId: string): Promise<OrdersResponse | null> {
+
+// export interface OrderItemResponse {
+//   orderItems: {
+//     product: {
+//       _id:Types.ObjectId,
+//       name:string,
+//       description: string,
+//       price: number,
+//     }
+//     qty : number,
+//     price: number,
+//   }[] | null, 
+//   }
+
+export interface OrderIdResponse {
+  _id: number,
+    date: number,
+    address: string,
+    cardHolder: string,
+    cardNumber: string,
+    orderItems:  {
+      product: {
+        _id:number,
+        name:string,
+        description: string,
+        price: number,
+        }
+        qty : number,
+        price : number,
+      }[] | null,
+  }
+
+export async function getUserOrderById(userId: string, orderId: string): Promise<OrderIdResponse | null> {
   await connect();
 
   const ordersProjection = {

@@ -51,7 +51,7 @@ export default async function Product({
       </div>
 
       
-      <div className='lg:w-auto mt-4 lg:mt-0'>
+      <div className='lg:w-auto mt-4 lg:mt-14'>
         <h4 className='text-xl font-bold mb-2'>Product Description</h4>
         <p>{product.description}</p>
       </div>

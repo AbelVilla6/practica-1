@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
-import { getUser, getUserOrderById, OrdersResponse } from '@/lib/handlers';
+import { getUser, getUserOrderById, OrderIdResponse } from '@/lib/handlers';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -24,14 +24,13 @@ export default async function Order_details({
     notFound();
   }
 
-  const order: OrdersResponse | null = await getUserOrderById(
+  const order: OrderIdResponse | null = await getUserOrderById(
     session.user._id, params.orderId
   );
 
-  if (!order || order === null) {
+  if (!order || order.orderItems === null) {
     notFound();
   }
-
 
   const date = new Date(order.date).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -63,7 +62,7 @@ export default async function Order_details({
                     <span className="ml-2 text-black">{order.address}</span>
                 </span>
                 <span className="mt-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                   <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />
                   <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 003 3h15a3 3 0 003-3v-7.5zm-18 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z" clip-rule="evenodd" />
                 </svg>
@@ -73,7 +72,7 @@ export default async function Order_details({
                     <span className="ml-2 text-black">{order.cardNumber} ({order.cardHolder})</span>
                 </span>
                 <span className="mt-4 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                   <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
                 </svg>
                     <span className="font-bold ml-2 text-gray-800">Order Date:</span>
