@@ -2,15 +2,18 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
-import { getUser, getOrdersByUserId, OrdersResponse } from '@/lib/handlers';
+import { getUser, getUserOrderById, OrdersResponse } from '@/lib/handlers';
 import Link from 'next/link';
-import { TrashIcon } from '@heroicons/react/24/outline';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Order_details() {
+export default async function Order_details({
+  params,
+}: {
+  params: { orderId: string };
+}) {
   const session: Session | null = await getServerSession(authOptions);
-
+  
   if (!session) {
     redirect('/api/auth/signin');
   }
@@ -21,115 +24,105 @@ export default async function Order_details() {
     notFound();
   }
 
-  const orderItems: OrdersResponse | null = await getOrdersByUserId(
-    session.user._id
+  const order: OrdersResponse | null = await getUserOrderById(
+    session.user._id, params.orderId
   );
 
-  if (!orderItems || orderItems.orders === null) {
+  if (!order || order === null) {
     notFound();
   }
 
+
+  const date = new Date(order.date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+});
   return (
-    <div className='flex flex-col'>
-      {orderItems.orders.length === 0 ? (
-        <div className='text-center'>
-          <span className='text-sm text-gray-400'>The user does not have any order.</span>
-        </div>
-      ) : (
-        <>
-          <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-3 lg:pb-2'>
-            Order details
-          </h3>
-          <div className='flex'>
-            <div>
-              {user.name && user.surname && (
-                <p className='flex py-2'>
+    <div>
+      <h3 className="text-2xl font-semibold mb-4">Order Details</h3>
+            <div className='relative overflow-x-auto'>
+                
+                <span className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                        <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+                    </svg>
+                    <span className="font-bold ml-2 text-gray-800">Order ID:</span>
+                    <span className="ml-2 text-black">{order._id}</span>
+                </span>
+                <span className="mt-4 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-                  </svg>
-                  <span className="font-bold ml-3 mr-3">Full name:</span> {user.name} {user.surname}
-                </p>
-              )}
-              {user.email && (
-                <p className='flex py-2'>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
-                    <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
-                  </svg>
-                  <span className="font-bold ml-3 mr-3">E-mail address:</span> {user.email}
-                </p>
-              )}
-              {user.address && (
-                <p className='flex py-2'>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path fillRule="evenodd" d="M4 16.5v-13h-.25a.75.75 0 010-1.5h12.5a.75.75 0 010 1.5H16v13h.25a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75v-2.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75v2.5a.75.75 0 01-.75.75h-3.5a.75.75 0 010-1.5H4zm3-11a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zM7.5 9a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1zM11 5.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zm.5 3.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-bold ml-3 mr-3">Address:</span> {user.address}
-                </p>
-              )}
-              {user.birthdate && (
-                <p className='flex py-2'>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path d="M6.75.98l-.884.883a1.25 1.25 0 101.768 0L6.75.98zM13.25.98l-.884.883a1.25 1.25 0 101.768 0L13.25.98zM10 .98l.884.883a1.25 1.25 0 11-1.768 0L10 .98zM7.5 5.75a.75.75 0 00-1.5 0v.464c-1.179.305-2 1.39-2 2.622v.094c.1-.02.202-.038.306-.051A42.869 42.869 0 0110 8.5c1.93 0 3.83.129 5.694.379.104.013.206.03.306.051v-.094c0-1.232-.821-2.317-2-2.622V5.75a.75.75 0 00-1.5 0v.318a45.645 45.645 0 00-1.75-.062V5.75a.75.75 0 00-1.5 0v.256c-.586.01-1.17.03-1.75.062V5.75zM4.505 10.365A41.377 41.377 0 0110 10c1.863 0 3.697.124 5.495.365C16.967 10.562 18 11.838 18 13.28v.693a3.72 3.72 0 01-1.665-.393 5.222 5.222 0 00-4.67 0 3.722 3.722 0 01-3.33 0 5.222 5.222 0 00-4.67 0A3.72 3.72 0 012 13.972v-.693c0-1.441 1.033-2.716 2.505-2.914zM15.665 14.921a5.22 5.22 0 002.335.551V16.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 012 16.5v-1.028c.8 0 1.6-.183 2.335-.551a3.722 3.722 0 013.33 0c1.47.735 3.2.735 4.67 0a3.722 3.722 0 013.33 0z" />
-                  </svg>
-                  <span className="font-bold ml-3 mr-3">Birthdate:</span>{user.birthdate ? new Date(user.birthdate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
-                </p>
-              )}
+                      <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                      <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                    </svg>      
+                    <span className="font-bold ml-2 text-gray-800">Shipping Address:</span>
+                    <span className="ml-2 text-black">{order.address}</span>
+                </span>
+                <span className="mt-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />
+                  <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 003 3h15a3 3 0 003-3v-7.5zm-18 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z" clip-rule="evenodd" />
+                </svg>
+
+
+                    <span className="font-bold ml-2 text-gray-800">Payment Information:</span>
+                    <span className="ml-2 text-black">{order.cardNumber} ({order.cardHolder})</span>
+                </span>
+                <span className="mt-4 mb-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                </svg>
+                    <span className="font-bold ml-2 text-gray-800">Order Date:</span>
+                    <span className="ml-2 text-black">{date}</span>
+                </span>
             </div>
-          </div>
-          <br></br>
-          <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
-            Orders
-          </h3>
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-300">
-              <tr>
-                <th scope="col" className="px-4 py-3">
-                  ORDER ID
-                </th>
-                <th scope="col" className="px-4 py-3 hidden sm:table-cell">
-                  SHIPMENT ADDRESS
-                </th>
-                <th scope="col" className="px-4 py-3 hidden sm:table-cell">
-                  PAYMENTS INFORMATION
-                </th>
-                <th scope="col" className="px-4 py-3">
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderItems.orders.map((order) => (
-                <tr key={order._id?.toString()} className="border-b dark:border-gray-700 bg-gray-50">
-                  <td
-                    scope="row"
-                    className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                      {order._id?.toString()}
-                  </td>
-                  <td className="px-4 py-3 hidden sm:table-cell">
-                    <div className='flex items-center'>
-                      <span className="px-2 py-1 rounded-md">
-                        {order.address}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 hidden sm:table-cell">
-                    <p className="font-bold">{order.cardHolder}</p>
-                    <p>{order.cardNumber}</p>
-                  </td>
-                  <td>
-                    <button className="text-blue-500">
-                      <Link href={`/orders/${order._id}`}>
-                        View details
-                      </Link>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
-    </div>
-  );
+            <div className="relative overflow-x-auto shadow-lg bg-white rounded-lg shadow-md p-6 mb-4">
+                <table className="w-full">
+                    <thead>
+                        <tr>
+                            <th scope="col" className="text-left font-semibold">PRODUCT</th>
+                            <th scope="col" className="text-center font-semibold px-4">QUANTITY</th>
+                            <th scope="col" className="text-right font-semibold px-4">PRICE</th>
+                            <th scope="col" className="text-right font-semibold px-4">TOTAL</th>
+                        </tr>
+                        <tr>
+                            <td colSpan={4}><hr className="my-2" /></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {order.orderItems.map((orderItem: any) => (
+                            <tr key={orderItem.product._id.toString()}>
+                                <th scope="row" className='py-4 text-left'>
+                                    <Link href={`/products/${orderItem.product._id}`}>
+                                        <span className="font-semibold">{orderItem.product.name}</span>
+                                    </Link>
+                                </th>
+                                <td scope="row" className='py-4 text-center'>{orderItem.qty}</td>
+                                <td scope="row" className='py-4 text-right'>{orderItem.price} €</td>                                
+                                <td scope="row" className='py-4 text-right'>{(orderItem.price * orderItem.qty).toFixed(2)} €</td>
+                                
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <hr className="my-4"></hr>
+                <div className="flex justify-between items-center">
+                    <span className="font-bold">Total:</span>
+                    <span className="font-semibold">
+                        {
+                            order.orderItems
+                                .map((orderItem: any) => Math.round(orderItem.price * orderItem.qty * 100) / 100)
+                                .reduce((accumulator: any, total: number) => accumulator + total, 0)
+                                .toFixed(2)
+                        }
+                        €
+                    </span>
+                </div>
+            </div>
+        </div>
+    )
 }

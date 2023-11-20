@@ -27,11 +27,11 @@ export async function getProducts(): Promise<ProductsResponse> {
 }
 
 //GET /api/orders
-export interface OrdersResponse {
-  orders : Order[];
-}
+// export interface OrdersResponse {
+//   orders : Order[];
+// }
 
-/*
+
 export interface OrdersResponse {
   orders: {
     _id: number,
@@ -48,7 +48,7 @@ export interface OrdersResponse {
         qty : number,
         price : number,
       }
-  }[] | null,} */
+  }[] | null,} 
 
 export async function getOrders(): Promise<OrdersResponse> {
   await connect();
