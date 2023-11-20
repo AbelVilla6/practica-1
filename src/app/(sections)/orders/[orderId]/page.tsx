@@ -8,7 +8,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Profile() {
+export default async function Order_details() {
   const session: Session | null = await getServerSession(authOptions);
 
   if (!session) {
@@ -38,7 +38,7 @@ export default async function Profile() {
       ) : (
         <>
           <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-3 lg:pb-2'>
-            User Profile
+            Order details
           </h3>
           <div className='flex'>
             <div>

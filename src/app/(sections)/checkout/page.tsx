@@ -68,7 +68,7 @@ export default async function Checkout() {
                     className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
                     <Link href={`/products/${cartItem.product._id}`}>
-                      {cartItem.product.name}&#34;
+                      {cartItem.product.name}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
