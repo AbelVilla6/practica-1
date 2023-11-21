@@ -38,7 +38,8 @@ export default async function Cart() {
         </div>
       ) : (
         <>
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <div className="relative overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-4 py-3">
@@ -50,7 +51,7 @@ export default async function Cart() {
                 <th scope="col" className="px-4 py-3">
                   Price
                 </th>
-                <th scope="col" className="px-4 py-3 hidden sm:table-cell">
+                <th scope="col" className="px-4 py-3">
                   Total
                 </th>
               </tr>
@@ -79,7 +80,7 @@ export default async function Cart() {
                     </div>
                   </td>
                   <td className="px-4 py-3">{cartItem.product.price} €</td>
-                  <td className="px-4 py-3 hidden sm:table-cell">{(cartItem.qty * cartItem.product.price).toFixed(2)} €</td>
+                  <td className="px-4 py-3">{(cartItem.qty * cartItem.product.price).toFixed(2)} €</td>
                 </tr>
               ))}
               <tr className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
@@ -88,13 +89,13 @@ export default async function Cart() {
                 </td>
                 <td className="px-4 py-3"></td>
                 <td className="px-4 py-3"></td>
-                <td className="px-4 py-3 hidden sm:table-cell">
+                <td className="px-4 py-3">
                   {cartItemsData.cartItems.reduce((total, cartItem) => total + cartItem.qty * cartItem.product.price, 0).toFixed(2)} €
                 </td>
               </tr>
             </tbody>
           </table>
-
+        </div>
           <div className="flex justify-center mt-6">
               <button className="bg-black text-white px-4 py-2 rounded-md">
                 <Link href="/checkout">

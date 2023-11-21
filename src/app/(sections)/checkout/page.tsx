@@ -43,6 +43,7 @@ export default async function Checkout() {
         </div>
       ) : (
         <>
+        <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -92,6 +93,7 @@ export default async function Checkout() {
               </tr>
             </tbody>
           </table>
+        </div>
 
           <div className="mt-6">
             <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Shipping Address</h2>

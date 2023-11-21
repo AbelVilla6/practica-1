@@ -26,12 +26,6 @@ export async function getProducts(): Promise<ProductsResponse> {
   };
 }
 
-// GET /api/orders
-// export interface OrdersResponse {
-//   orders : Order[];
-// }
-
-
 export interface OrdersResponse {
   orders: {
     _id: number,
@@ -169,10 +163,7 @@ export interface CreateUserResponse {
     }[] | null, 
     
   }
-  /*interface CartItem {
-    product:string,
-    qty:number,
-  }*/
+
   export async function getCartByUserId(userId: string): Promise<CartResponse | null> {
     await connect();
   
@@ -332,19 +323,6 @@ export async function createOrder(
 export interface UserOrderResponse {
   cartItems: [] | null;
 }
-
-// export interface OrderItemResponse {
-//   orderItems: {
-//     product: {
-//       _id:Types.ObjectId,
-//       name:string,
-//       description: string,
-//       price: number,
-//     }
-//     qty : number,
-//     price: number,
-//   }[] | null, 
-//   }
 
 export interface OrderIdResponse {
   _id: number,
