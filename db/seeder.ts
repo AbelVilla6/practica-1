@@ -161,14 +161,14 @@ async function seed() {
     cardNumber: '4455667788990011',
     orderItems: [
       {
-        product: insertedProducts[0]._id,
+        product: insertedProducts[2]._id,
         qty: 2,
-        price: insertedProducts[0].price,
+        price: insertedProducts[2].price,
       },
       {
-        product: insertedProducts[1]._id,
+        product: insertedProducts[3]._id,
         qty: 5,
-        price: insertedProducts[1].price,
+        price: insertedProducts[3].price,
       },
     ],
   }
@@ -192,6 +192,14 @@ async function seed() {
       {
         product: insertedProducts[1]._id,
         qty: 5,
+      },
+      {
+        product: insertedProducts[2]._id,
+        qty: 1,
+      },
+      {
+        product: insertedProducts[3]._id,
+        qty: 3,
       },
     ],
     orders: [    
