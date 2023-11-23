@@ -1,10 +1,10 @@
 import { Types } from 'mongoose';
 import { notFound } from 'next/navigation';
 import { getProduct } from '@/lib/handlers';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
 import { Session } from 'next-auth';
+import CartItemCounter from "@/components/CartItemCounter";
 
 export default async function Product({
   params,
@@ -41,16 +41,7 @@ export default async function Product({
               {product.price} €
             </p>
             {session && (
-              <div className='flex items-center'>
-              <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md mr-1">-</button>
-              <span className="bg-gray-200 px-2 py-1 rounded-md">
-                0
-              </span>
-              <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md ml-1">+</button>
-              <button className="text-gray-500 bg-red-200 px-2 py-1 rounded-md ml-1">
-                <TrashIcon className='h-5 w-5' aria-hidden='true' />
-              </button>
-            </div>
+              <CartItemCounter productId={params.productId} />
             )}
           </div>
         )}

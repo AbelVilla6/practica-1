@@ -46,7 +46,7 @@ export default function CartItemList() {
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    <div className='flex items-center'>
+                    {/* <div className='flex items-center'>
                       <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md mr-1">-</button>
                       <span className="bg-gray-200 px-2 py-1 rounded-md">
                         {cartItem.qty}
@@ -55,7 +55,8 @@ export default function CartItemList() {
                       <button className="text-gray-500 bg-red-200 px-2 py-1 rounded-md ml-1">
                         <TrashIcon className='h-5 w-5' aria-hidden='true' />
                       </button>
-                    </div>
+                    </div> */}
+                    <CartItemCounter productId={cartItem.product._id.toString()}/>
                   </td>
                   <td className="px-4 py-3">{cartItem.product.price} €</td>
                   <td className="px-4 py-3">{(cartItem.qty * cartItem.product.price).toFixed(2)} €</td>
