@@ -6,18 +6,14 @@ export default function SampleClientComponent() {
   const [leftCount, setLeftCount] = useState(0);
   const [rightCount, setRightCount] = useState(0);
 
-//   useEffect(() =>
-//   alert("Component rendered!")
-//     );
-// useEffect(() =>
-//   alert("Component rendered!")
-// , []);
-// useEffect(() =>
-//   alert("Component rendered!")
-// , [leftCount]);
+//   useEffect(() => alert("Component rendered!"));
+
+//   useEffect(() => alert("Component rendered!"), []);
+
+  useEffect(() => alert("Component rendered!"), [leftCount]);
 
   function handleLeftClick() {
-    setLeftCount((count) => count + 1);
+    setLeftCount((count) => count + 1); //No es lo mismo que setLeftCount(count + 1)
   }
 
   function handleRightClick() {
