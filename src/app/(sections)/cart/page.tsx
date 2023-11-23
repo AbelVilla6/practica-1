@@ -3,8 +3,6 @@ import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
 import { CartResponse, getCartByUserId } from '@/lib/handlers';
-import Link from 'next/link';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import CartItemsList from "@/components/CartItemsList";
 
 export const dynamic = 'force-dynamic';
@@ -33,8 +31,7 @@ export default async function Cart() {
       <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
         My Shopping Cart
       </h3>
-      <div><CartItemsList /></div>
-      
+      <CartItemsList />
     </div>
   );
 }
