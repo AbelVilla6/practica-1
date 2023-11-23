@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-
 export default function SampleClientComponent() {
   const [leftCount, setLeftCount] = useState(0);
   const [rightCount, setRightCount] = useState(0);
