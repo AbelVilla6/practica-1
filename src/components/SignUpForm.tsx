@@ -45,7 +45,7 @@ export default function SignUpForm() {
         if (data.ok) {
         //   const body = await data.json();
         //   createUser(body.formValues);
-          router.push('/auth/signin');
+          router.push('/');
         } else {
           setError('There is already an account with that email');
         }

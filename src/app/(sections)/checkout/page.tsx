@@ -5,7 +5,7 @@ import { Session } from 'next-auth';
 import { CartResponse, getCartByUserId } from '@/lib/handlers';
 import { OrdersResponse, getOrdersByUserId } from '@/lib/handlers';
 import Link from 'next/link';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import PurchaseButton from "@/components/PurchaseButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -121,9 +121,10 @@ export default async function Checkout() {
           </div>
 
           <div className="flex justify-center mt-8">
-              <button className="bg-gray-300 text-white px-5 py-3 rounded-md">
-                  Purchase
-              </button>
+            <PurchaseButton />
+                {/* <button className="bg-gray-300 text-white px-5 py-3 rounded-md">
+                    Purchase
+                </button> */}
           </div>
         </> 
       )}
