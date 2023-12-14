@@ -43,14 +43,62 @@ export default function CartItemCounter({
             }
           };
 
+          const onLessBtnClick = async function (event: React.MouseEvent) {
+
+            if (qty <= 1) {
+              return;
+            }
+            setIsUpdating(true);
+          
+            try {
+              const res = await fetch(
+                `/api/users/${session!.user._id}/cart/${productId}`,
+                {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                    qty: qty - 1,
+                  }),
+                }
+              );
+          
+              if (res.ok) {
+                const body = await res.json();
+                updateCartItems(body.cartItems);
+              }
+            } finally {
+              setIsUpdating(false);
+            }
+          };
+
+          const onDeleteBtnClick = async function (event: React.MouseEvent) {
+            setIsUpdating(true);
+          
+            try {
+              const res = await fetch(
+                `/api/users/${session!.user._id}/cart/${productId}`,
+                {
+                  method: 'Delete',
+                  body: JSON.stringify({cartItems}),
+                }
+              );
+          
+              if (res.ok) {
+                const body = await res.json();
+                updateCartItems(body.cartItems);
+              }
+            } finally {
+              setIsUpdating(false);
+            }
+          };
+
         return (
             <div className='flex items-center'>
-                <button className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md mr-1">-</button>
+                <button onClick={onLessBtnClick} className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md mr-1" disabled={!session || isUpdating}>-</button>
                 <span className="bg-gray-200 px-2 py-1 rounded-md">
                 {qty}
                 </span>
                 <button onClick={onPlusBtnClick} className="text-gray-500 bg-gray-300 px-2 py-1 rounded-md ml-1" disabled={!session || isUpdating}>+</button>
-                <button className="text-gray-500 bg-red-200 px-2 py-1 rounded-md ml-1">
+                <button onClick={onDeleteBtnClick} className="text-gray-500 bg-red-200 px-2 py-1 rounded-md ml-1" disabled={!session || isUpdating}>
                     <TrashIcon className='h-5 w-5' aria-hidden='true' />
                 </button>
             </div>
