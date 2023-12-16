@@ -8,7 +8,7 @@ import Users, { User } from '@/models/User';
 
 
 interface FormValues {
-  name: string;
+  name: string; 
   surname: string;
   email: string;
   password: string;

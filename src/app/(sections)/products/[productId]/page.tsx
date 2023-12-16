@@ -26,7 +26,7 @@ export default async function Product({
 
   return (
     <div className='flex flex-col lg:flex-row items-start lg:items-start'>
-    <CartItemCounterWrapper productId={params.productId}>
+    {/* <CartItemCounterWrapper productId={params.productId}> */}
       <div className='lg:w-1/2 lg:mr-8'>
         <h3 className='text-3xl font-bold mb-4'>{product.name}</h3>
 
@@ -47,7 +47,7 @@ export default async function Product({
           </div>
         )}
       </div>
-      </CartItemCounterWrapper>
+      {/* </CartItemCounterWrapper> */}
       
       <div className='lg:w-2/3 mt-4 lg:mt-14'>
         <h4 className='text-xl font-bold mb-2'>Product Description</h4>

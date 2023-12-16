@@ -3,7 +3,7 @@ import { authOptions } from '@/lib/authOptions';
 import { notFound, redirect } from 'next/navigation';
 import { Session } from 'next-auth';
 import { CartResponse, getCartByUserId } from '@/lib/handlers';
-import { OrdersResponse, getOrdersByUserId } from '@/lib/handlers';
+// import { OrdersResponse, getOrdersByUserId } from '@/lib/handlers';
 import Link from 'next/link';
 import PurchaseButton from "@/components/PurchaseButton";
 
@@ -20,17 +20,17 @@ export default async function Checkout() {
     session.user._id
   );
 
-  const orderData = await getOrdersByUserId(
-    session.user._id
-  );
+  // const orderData = await getOrdersByUserId(
+  //   session.user._id
+  // );
 
   if (!cartItemsData || cartItemsData.cartItems === null) {
     notFound();
   }
 
-  if (!orderData || orderData.orders === null) {
-    notFound();
-  }
+  // if (!orderData || orderData.orders === null) {
+  //   notFound();
+  // }
 
   return (
     <div className='flex flex-col'>
@@ -95,15 +95,14 @@ export default async function Checkout() {
           </table>
         </div>
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Shipping Address</h2>
             <div className="border rounded p-2 mt-2 bg-white">
                 <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].address}</p>
             </div>
-          </div>
+          </div> */}
 
-          <div className="mt-6 flex flex-col sm:flex-row">
-            {/* Primer par */}
+          {/* <div className="mt-6 flex flex-col sm:flex-row">
             <div className="w-full sm:w-1/2 mr-4">
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Holder</h2>
                 <div className="border rounded p-2 mt-2 bg-white">
@@ -111,16 +110,15 @@ export default async function Checkout() {
                 </div>
             </div>
 
-            {/* Segundo par */}
             <div className="w-full sm:w-1/2">
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Number</h2>
                 <div className="border rounded p-2 mt-2 bg-white">
                 <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].cardNumber}</p>
                 </div>
             </div>
-          </div>
+          </div>  */}
 
-          <div className="flex justify-center mt-8">
+          <div>
             <PurchaseButton />
                 {/* <button className="bg-gray-300 text-white px-5 py-3 rounded-md">
                     Purchase

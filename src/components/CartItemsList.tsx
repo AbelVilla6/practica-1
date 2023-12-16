@@ -16,7 +16,7 @@ export default function CartItemList() {
       const fetchCart = async () => {
         try {
           const res = await fetch(
-            '/api/users/${session!.user._id}/cart',
+            `/api/users/${session!.user._id}/cart`,
             {
               method: 'GET',
               // body: JSON.stringify({cartItems}),
