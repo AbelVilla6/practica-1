@@ -11,9 +11,9 @@ interface CartItemCounterWrapperProps {
   children: ReactNode;
 }
 
-export default function CartItemCounterWrapper({ productId, children }: CartItemCounterWrapperProps) {
+export default function CartItemCounterWrapper({ children }: CartItemCounterWrapperProps) {
   const { data: session } = useSession({ required: true });
-  const { cartItems, updateCartItems } = useContext(CartItemsContext);
+  const { updateCartItems } = useContext(CartItemsContext);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -35,7 +35,7 @@ export default function CartItemCounterWrapper({ productId, children }: CartItem
     };
 
     fetchCart();
-  }, [session, updateCartItems]);
+  }, [updateCartItems]);
 
-  return <div>{children}</div>;
+  return <div className='lg:w-1/2 lg:mr-8'>{children}</div>;
 }

@@ -8,9 +8,9 @@ export default function SampleClientComponent() {
 
 //   useEffect(() => alert("Component rendered!"));
 
-//   useEffect(() => alert("Component rendered!"), []);
+  useEffect(() => alert("Component rendered!"), []);
 
-  useEffect(() => alert("Component rendered!"), [leftCount]);
+  // useEffect(() => alert("Component rendered!"), [leftCount]);
 
   function handleLeftClick() {
     setLeftCount((count) => count + 1); //No es lo mismo que setLeftCount(count + 1)
