@@ -23,38 +23,32 @@ export default async function Product({
   if (product === null) {
     notFound();
   }
-
   return (
-    <div className='flex flex-col lg:flex-row items-start lg:items-start'>
-    <CartItemCounterWrapper productId={params.productId}>
-      {/* <div className='lg:w-1/2 lg:mr-8'> */}
-        <h3 className='text-3xl font-bold mb-4'>{product.name}</h3>
-
-        {product.img && (
-          <div className='flex flex-col items-center'>
-            <img
-              src={product.img}
-              alt={product.name}
-              className='w-52 h-auto mb-4'
-            />
-
-            <p className='text-2xl font-bold mb-2'>
-              {product.price} €
-            </p>
-            {session && (
-              <CartItemCounter productId={params.productId} />
-            )}
+      <div className="flex-auto">
+          <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
+              {product.name}
+          </h3>
+          <div className="grid py-4 min-w-full flex flex-col sm:grid-cols-2">
+              <div className='w-full'>
+                  <div className='flex justify-center py-2'>
+                      <img
+                          src={product.img}
+                          alt={product.name}
+                          className='h-2/5 w-2/5'
+                      />
+                  </div>
+                  <p className="flex justify-center text-3xl text-gray-900 py-2">{product.price} €</p>
+                  {session && (
+                  <div className="flex justify-center">  
+                      <CartItemCounter productId={params.productId}/>
+                  </div>
+                  )}    
+              </div>
+              <div className='w-full py-10 sm:py-0 md:py-0 lg:py-0 xl:py-0'>
+                  <p className="text-2xl font-bold pb-3">Product Description</p>
+                  {product.description && <p><span className="font-bold"></span> {product.description}</p>}
+              </div>
           </div>
-        )}
-      {/* </div> */}
-      </CartItemCounterWrapper>
-      
-      <div className='lg:w-2/3 mt-4 lg:mt-14'>
-        <h4 className='text-xl font-bold mb-2'>Product Description</h4>
-        <p>{product.description}</p>
-      </div>
-      
-
-      </div>
+      </div>    
   );
 }
