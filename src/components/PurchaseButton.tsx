@@ -1,11 +1,9 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUser } from '@/lib/handlers';
-import Users, { User } from '@/models/User';
-
+import { CartItemsContext } from "@/providers/CartItemsProvider";
 
 interface FormValues {
   address: string; 
@@ -17,6 +15,7 @@ export default function PurchaseForm() {
   const { data: session } = useSession({ required: true });
   const router = useRouter();
   const [error, setError] = useState<string>('');
+  const { cartItems, updateCartItems } = useContext(CartItemsContext);
   const [formValues, setFormValues] = useState<FormValues>({
     address: '',
     cardHolder: '',

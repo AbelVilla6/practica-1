@@ -311,7 +311,7 @@ export async function createOrder(
 
   const newOrder = await Orders.create(doc);
   user.orders.push(newOrder._id);  
-
+  user.cartItems = [];
   await user.save();  
 
   return {
