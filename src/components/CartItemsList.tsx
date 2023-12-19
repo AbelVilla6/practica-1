@@ -33,7 +33,7 @@ export default function CartItemList() {
       };
   
       fetchCart();
-    }, [updateCartItems]);
+    }, [session,updateCartItems]);
 
     return (
       <div>
