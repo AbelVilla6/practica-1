@@ -1,8 +1,8 @@
-import { ProductsResponse, getOrders } from '@/lib/handlers';
+import { OrdersResponse, getOrders } from '@/lib/handlers';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest): Promise<NextResponse<ProductsResponse>> {
-  const products = await getOrders();
+export async function GET(request: NextRequest): Promise<NextResponse<OrdersResponse>> {
+  const orders = await getOrders();
 
-  return NextResponse.json(products);
+  return NextResponse.json(orders);
 }

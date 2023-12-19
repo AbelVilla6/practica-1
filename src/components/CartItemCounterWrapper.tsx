@@ -35,7 +35,7 @@ export default function CartItemCounterWrapper({ children }: CartItemCounterWrap
     };
 
     fetchCart();
-  }, [updateCartItems]);
+  }, [session, updateCartItems]);
 
   return <div >{children}</div>;
 }
