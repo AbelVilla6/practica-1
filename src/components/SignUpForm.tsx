@@ -239,9 +239,11 @@ export default function SignUpForm() {
             }))
           }
         />
-        <p className='mt-2 hidden text-sm text-red-500 peer-[&:not(:placeholder-shown):not(:focus):invalid]:block'>
-          Please provide a valid date.
-        </p>
+        {formValues.birthdate !== null && (
+          <p className='mt-2 hidden text-sm text-red-500 peer-[&:not(:placeholder-shown):not(:focus):invalid]:block'>
+            Please provide a valid date.
+          </p>
+        )}
       </div>
 
       {error &&

@@ -6,12 +6,12 @@ import Link from 'next/link';
 import CartItemCounter from "@/components/CartItemCounter";
 import { CartItemsContext } from '@/providers/CartItemsProvider';
 import { CartResponse } from '@/lib/handlers';
+import { check } from 'prettier';
 
 export default function CartItemList() {
     const { data: session } = useSession({ required: true });
     const { cartItems, updateCartItems } = useContext(CartItemsContext);
     
-
     useEffect(() => {
       const fetchCart = async () => {
         try {
@@ -22,9 +22,9 @@ export default function CartItemList() {
               // body: JSON.stringify({cartItems}),
             }
           ); 
+          const body = await res.json();
   
-          if (res.ok) {
-            const body = await res.json();
+          if (res.ok) {            
             updateCartItems(body.cartItems);
           }
         } catch (error) {
@@ -92,12 +92,12 @@ export default function CartItemList() {
                 </tbody>
               </table>
             </div>
-              <div className="flex justify-center mt-6">
-                  <button className="bg-black text-white px-4 py-2 rounded-md">
-                    <Link href="/checkout">
-                      Check Out
-                    </Link>
-                  </button>
+              <div className="flex justify-center mt-6">                 
+                <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                  <Link href={`/checkout`}>
+                      Checkout
+                  </Link>
+                </button>                 
               </div>
             </> 
           )}

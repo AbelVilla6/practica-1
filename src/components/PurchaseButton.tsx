@@ -44,7 +44,7 @@ export default function PurchaseForm() {
           router.push(`/orders/${newOrder._id}`);
         } else {
             const errorResponse = await data.json(); // Intenta obtener detalles del error
-            setError(errorResponse.message || 'There is probably an error with the order data');
+            setError(errorResponse.message || 'Please, complete all the data to make a purchase');
         //   setError('There is probably an error with the order data');
         }
     } catch (error) {
@@ -156,7 +156,7 @@ export default function PurchaseForm() {
       <div className="flex justify-center mt-8">
         <button
           type='submit'
-          className="bg-gray-300 text-white px-5 py-3 rounded-md"
+          className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
         >
           Purchase
         </button>

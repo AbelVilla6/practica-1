@@ -40,7 +40,7 @@ export default async function Product({
                   <p className="flex justify-center text-3xl text-gray-900 py-2">{product.price} €</p>
                   {session && (
                   <div className="flex justify-center">  
-                      <CartItemCounter productId={params.productId}/>
+                      <CartItemCounterWrapper><CartItemCounter productId={params.productId}/></CartItemCounterWrapper>
                   </div>
                   )}    
               </div>

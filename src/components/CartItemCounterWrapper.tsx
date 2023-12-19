@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 import { CartItemsContext } from '@/providers/CartItemsProvider';
 
 interface CartItemCounterWrapperProps {
-  productId: string;
+  productId?: string;
   children: ReactNode;
 }
 
@@ -37,5 +37,5 @@ export default function CartItemCounterWrapper({ children }: CartItemCounterWrap
     fetchCart();
   }, [updateCartItems]);
 
-  return <div className='lg:w-1/2 lg:mr-8'>{children}</div>;
+  return <div >{children}</div>;
 }

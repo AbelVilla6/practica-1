@@ -16,21 +16,12 @@ export default async function Checkout() {
     redirect('/api/auth/signin');
   }
 
-  const cartItemsData: CartResponse | null = await getCartByUserId(
-    session.user._id
-  );
+  const cartItemsData: CartResponse | null = await getCartByUserId(session.user._id);
 
-  // const orderData = await getOrdersByUserId(
-  //   session.user._id
-  // );
 
   if (!cartItemsData || cartItemsData.cartItems === null) {
     notFound();
   }
-
-  // if (!orderData || orderData.orders === null) {
-  //   notFound();
-  // }
 
   return (
     <div className='flex flex-col'>
@@ -95,34 +86,8 @@ export default async function Checkout() {
           </table>
         </div>
 
-          {/* <div className="mt-6">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Shipping Address</h2>
-            <div className="border rounded p-2 mt-2 bg-white">
-                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].address}</p>
-            </div>
-          </div> */}
-
-          {/* <div className="mt-6 flex flex-col sm:flex-row">
-            <div className="w-full sm:w-1/2 mr-4">
-                <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Holder</h2>
-                <div className="border rounded p-2 mt-2 bg-white">
-                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].cardHolder}</p>
-                </div>
-            </div>
-
-            <div className="w-full sm:w-1/2">
-                <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Card Number</h2>
-                <div className="border rounded p-2 mt-2 bg-white">
-                <p className="text-sm text-gray-400 dark:text-gray-300">{orderData.orders[0].cardNumber}</p>
-                </div>
-            </div>
-          </div>  */}
-
-          <div>
+          <div >
             <PurchaseButton />
-                {/* <button className="bg-gray-300 text-white px-5 py-3 rounded-md">
-                    Purchase
-                </button> */}
           </div>
         </> 
       )}
